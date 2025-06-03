@@ -3,6 +3,7 @@ import { Toaster, toast } from 'sonner';
 import { useAuthStore } from '../../stores/authStore';
 import ConfirmModal from './ConfirmModal';
 import { Sparkles, Gamepad2, Info, LogIn } from 'lucide-react';
+import { Link } from 'react-router-dom'
 
 export default function Header() {
   const { address, connectWallet } = useAuthStore();
@@ -47,7 +48,7 @@ export default function Header() {
           <ul className="flex gap-6 bg-neutral-800/50 border border-neutral-700/40 rounded-full px-8 py-2 shadow-inner">
             <li>
               <a
-                href="#"
+                href="/games"
                 className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110  active:scale-95  duration-300"
               >
                 <Sparkles className="h-4 w-4" /> Inicio
@@ -58,12 +59,12 @@ export default function Header() {
                 href="#"
                 className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110  active:scale-95  duration-300"
               >
-                <Gamepad2 className="h-4 w-4" /> Juegos
+                <Gamepad2 className="h-4 w-4" /> Mis juegos
               </a>
             </li>
             <li>
               <a
-                href="#"
+                href="/about"
                 className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110  active:scale-95  duration-300"
               >
                 <Info className="h-4 w-4" /> Acerca de

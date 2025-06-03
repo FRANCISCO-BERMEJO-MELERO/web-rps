@@ -20,19 +20,7 @@ const GameViewer = () => {
           {games.map((game) => (
             <GameCard
               key={game.id}
-              id={game.id}
-              creator={game.creator}
-              opponent={game.opponent}
-              bet_denom={game.bet.denom}
-              bet_amount={game.bet.amount}
-              state={game.state}
-              created_at={game.createdAt}
-              creator_hash={game.creatorHash}
-              opponent_hash={game.opponentHash}
-              creator_move={game.creatorMove}
-              opponent_move={game.opponentMove}
-              winner={game.winner}
-              deadline={game.deadline}
+              game={game}
             />
           ))}
         </div>

@@ -1,21 +1,9 @@
-import { useState } from 'react'
-import './App.css'
-import Header from './components/General/Header.jsx'
-import GamesList from './components/Games/GamesList.jsx'
+import { Outlet } from 'react-router-dom';
 
-
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    
-    <div className='bg-radial-[at_25%_25%] from-neutral-800 from-10%% to-neutral-950 to-35%% min-h-screen text-white'>
-      <Header/>
-      
-      <GamesList/>
+    <div className="min-h-screen bg-neutral-950 text-white">
+      <Outlet /> {/* Aquí se renderizan las rutas hijas */}
     </div>
-    
-  )
+  );
 }
-
-export default App
