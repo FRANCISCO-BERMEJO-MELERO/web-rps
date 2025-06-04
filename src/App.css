@@ -1,0 +1,10 @@
+@keyframes twinkleStars {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.25; }
+}
+
+.animate-twinkleStars {
+  animation: twinkleStars 10s ease-in-out infinite;
+  background-size: cover;
+  background-repeat: repeat;
+}

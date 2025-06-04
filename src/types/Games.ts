@@ -5,10 +5,10 @@ export type GameType = {
     bet: number;
     denom: string;
     state: 'pending' | 'active' | 'finished';
-    creator_hash: string;
-    opponent_hash: string;
-    creator_move: string;
-    opponent_move: string;
+    creatorHash: string;
+    opponentHash: string;
+    creatorMove: string;
+    opponentMove: string;
     winner: string;
     deadline: number;
     created_at: number;

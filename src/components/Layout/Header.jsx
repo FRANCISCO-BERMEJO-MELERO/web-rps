@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import { useAuthStore } from '../../stores/authStore';
-import ConfirmModal from './ConfirmModal';
-import { Sparkles, Gamepad2, Info, LogIn } from 'lucide-react';
+import ConfirmModal from './Modals/ConfirmModal';
+import { Sparkles, Gamepad2, Info, LogIn, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom'
+import { useGames } from '../../hooks/useGames';
+import Modal from './Modals/Modal';
+import { sha256 } from 'js-sha256';
+
 
 export default function Header() {
-  const { address, connectWallet } = useAuthStore();
+  const { address, connectWallet, disconnectWallet } = useAuthStore();
   const [showConfirm, setShowConfirm] = useState(false);
+  const { createGame } = useGames();
+  const [showModal, setShowModal] = useState(false);
 
   const handleConfirm = async () => {
     setShowConfirm(false);
@@ -25,12 +31,16 @@ export default function Header() {
     }
   };
 
+
+
+
+
   return (
     <>
-      <header className="w-full fixed top-0 z-50 bg-neutral-900/70 backdrop-blur-md ">
-        <nav className="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+      <header className="w-full fixed top-0 z-50 bg-neutral-900/70 backdrop-blur-md border-b border-neutral-700">
+        <nav className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
           {/* Logo */}
-          <a href="https://pingpub.dezen.dev/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-2 group">
             <div className="relative">
               <img
                 src="/img/Roshambo.png"
@@ -39,63 +49,75 @@ export default function Header() {
               />
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-fuchsia-500 blur-lg opacity-0 rounded-full transition-opacity duration-300 group-hover:opacity-30"></div>
             </div>
-            <span className="text-2xl font-extrabold tracking-widest bg-gradient-to-r from-purple-400 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+            <span className="text-xl font-extrabold tracking-widest bg-gradient-to-r from-purple-400 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
               Roshambo
             </span>
-          </a>
+          </Link>
 
-          {/* Links */}
-          <ul className="flex gap-6 bg-neutral-800/50 border border-neutral-700/40 rounded-full px-8 py-2 shadow-inner">
+          <ul className="flex gap-6 items-center bg-neutral-800/50 border border-neutral-700/40 rounded-full px-6 py-2 shadow-inner">
             <li>
-              <a
-                href="/games"
-                className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110  active:scale-95  duration-300"
+              <Link
+                to="/games"
+                className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110 active:scale-95 duration-300"
               >
-                <Sparkles className="h-4 w-4" /> Inicio
-              </a>
+                <Sparkles className="h-4 w-4" /> Juegos
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
-                className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110  active:scale-95  duration-300"
+              <Link
+                to="/my-games"
+                className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110 active:scale-95 duration-300"
               >
-                <Gamepad2 className="h-4 w-4" /> Mis juegos
-              </a>
+                <Gamepad2 className="h-4 w-4" /> Mis Juegos
+              </Link>
             </li>
             <li>
-              <a
-                href="/about"
-                className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110  active:scale-95  duration-300"
+              <Link
+                to="/about"
+                className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110 active:scale-95 duration-300"
               >
                 <Info className="h-4 w-4" /> Acerca de
-              </a>
+              </Link>
             </li>
           </ul>
 
-          {/* Botón de conexión */}
-          <div>
+          {/* Acciones */}
+          <div className="flex items-center gap-4">
             {address ? (
-              <span className="relative inline-block bg-gradient-to-r from-green-500 to-emerald-400 text-sm px-4 py-1 rounded-full shadow-md animate-pulse hover:scale-105 transition-transform duration-300">
-                {address.slice(0, 10)}...
-                <span className="absolute inset-0 rounded-full blur-xl opacity-30 bg-green-500 animate-pulse pointer-events-none"></span>
-              </span>
+              <>
+                <span className="bg-gradient-to-r from-green-500 to-emerald-400 text-sm px-4 py-2 rounded-full shadow-md animate-pulse">
+                  {address.slice(0, 10)}...
+                </span>
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-sm px-4 py-2 rounded-full shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
+                >
+                  Crear juego
+                </button>
+                <button
+                  onClick={disconnectWallet}
+                  className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-rose-500 text-sm px-4 py-2 rounded-full shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Cerrar sesión
+                </button>
+              </>
             ) : (
               <button
                 onClick={() => setShowConfirm(true)}
-                className="relative bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-sm px-4 py-2 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 font-semibold"
+                className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-sm px-4 py-2 rounded-full shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
               >
                 <LogIn className="inline-block h-4 w-4 mr-1" /> Conectar Wallet
-                <span className="absolute inset-0 rounded-full blur-xl opacity-30 bg-purple-500 animate-pulse pointer-events-none"></span>
               </button>
             )}
           </div>
         </nav>
       </header>
 
-      {/* Mantenemos un pequeño padding-top en el contenido para que no quede cubierto por el header */}
-      <div className="pt-[68px]" />
+      {/* Compensamos altura del header */}
+      <div className="h-16" />
 
-      {/* Modal de confirmación (debe estar fuera del header) */}
+
       {showConfirm && (
         <ConfirmModal
           title="Conectar Wallet"
@@ -104,8 +126,13 @@ export default function Header() {
           onCancel={() => setShowConfirm(false)}
         />
       )}
+      {showModal && (
+        <Modal
+          onClose={() => setShowModal(false)}
+        />
+      )
+      }
 
-      {/* Toast notifications */}
       <Toaster position="bottom-right" richColors />
     </>
   );

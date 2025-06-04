@@ -4,10 +4,11 @@ import { useGames } from '../../hooks/useGames';
 import { useAuthStore } from '../../stores/authStore';
 import { User, Swords, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 import GameActions from './GameActions';
+import { Router } from 'react-router-dom';
 
 export default function GameCard({game}) {
   const { address } = useAuthStore();
-  const { joinGame } = useGames();
+  const { joinGame, getactualHeight } = useGames();
   const [showDetails, setShowDetails] = useState(false);
   const isParticipant = address === game.creator || address === game.opponent;
   const isActive = game.state === 'active';
@@ -17,7 +18,7 @@ export default function GameCard({game}) {
   const formattedCreatedAt = new Date(game.created_at * 1000).toLocaleString();
 
   const handleJoinGame = () => {
-    joinGame(id, address);
+    joinGame(game.id, address);
   };
 
 
@@ -27,7 +28,7 @@ export default function GameCard({game}) {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02, boxShadow: '0 0 30px rgba(139, 92, 246, 0.4)' }}
       transition={{ duration: 1  , ease: 'easeInOut' }}
-      className="relative rounded-2xl p-6 mb-8 w-full max-w-2xl mx-auto bg-neutral-900/60 backdrop-blur-md border border-purple-600/40 shadow-[0_0_30px_rgba(139,92,246,0.1)] text-white overflow-hidden"
+      className="relative rounded-2xl p-6 mb-8 w-full  max-w-2xl mx-auto bg-neutral-900/60 backdrop-blur-md border border-purple-600/40 shadow-[0_0_30px_rgba(139,92,246,0.1)] text-white overflow-hidden"
     >
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-bold tracking-widest flex items-center gap-2">
@@ -93,10 +94,10 @@ export default function GameCard({game}) {
                 className="mt-4 bg-neutral-800/70 rounded-xl  text-sm text-gray-300"
                 >
                 <div className="p-6">
-                    <p><strong>Hash Creador:</strong> {game.creator_hash}</p>
-                    <p><strong>Hash Oponente:</strong> {game.opponent_hash || 'N/A'}</p>
-                    <p><strong>Movimiento Creador:</strong> {game.creator_move || 'No revelado'}</p>
-                    <p><strong>Movimiento Oponente:</strong> {game.opponent_move || 'No revelado'}</p>
+                    <p><strong>Hash Creador:</strong> {game.creatorHash}</p>
+                    <p><strong>Hash Oponente:</strong> {game.opponentHash}</p>
+                    <p><strong>Movimiento Creador:</strong> {game.creatorMove || 'No revelado'}</p>
+                    <p><strong>Movimiento Oponente:</strong> {game.opponentMove || 'No revelado'}</p>
                     
                 </div>
                 </motion.div>
