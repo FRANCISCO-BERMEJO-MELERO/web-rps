@@ -31,7 +31,7 @@ export default function GameActions({ game, user }) {
             className="relative px-5 py-2 rounded-lg border-2  bg-neutral-900 text-white font-semibold transition-all duration-300 hover:scale-[1.03] active:scale-95
         border-purple-500 hover:text-purple-300 before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-purple-600 before:opacity-30 before:blur-md before:animate-pulse"
           >
-            🕹️ Jugar movimiento
+             Jugar movimiento
           </button>
         )}
 
@@ -40,7 +40,7 @@ export default function GameActions({ game, user }) {
             onClick={() => setShowRevealMoveModal(true)}
             className="relative px-5 py-2 rounded-lg border-2 border-yellow-500 text-yellow-300 font-semibold bg-transparent transition-all duration-300 hover:scale-[1.03] active:scale-95 hover:text-yellow-400"
           >
-            🪄 Revelar movimiento
+             Revelar movimiento
           </button>
         )}
 
@@ -49,7 +49,7 @@ export default function GameActions({ game, user }) {
             onClick={() => alert("Reclamar premio (lógica pendiente)")}
             className="relative px-5 py-2 rounded-lg border-2 border-emerald-500 text-emerald-300 font-semibold bg-transparent transition-all duration-300 hover:scale-[1.03] active:scale-95 hover:text-emerald-400"
           >
-            🏆 Reclamar premio
+             Reclamar premio
           </button>
         )}
       </div>

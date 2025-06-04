@@ -2,23 +2,34 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { customRegistry } from "./registry";
 import { toast } from "sonner";
 
+// Asegúrate de sugerir la red antes de habilitarla
 export const connectWallet = async () => {
   if (!window.keplr) {
-    throw new Error("Por favor instala Keplr");
+    toast.error("Por favor instala Keplr");
+    throw new Error("Keplr no está instalado");
   }
 
-  await window.keplr.enable("red");
-  const offlineSigner = window.getOfflineSigner("red");
-  const accounts = await offlineSigner.getAccounts();
+  try {
+    await suggestChainToKeplr(); // Sugerir red primero
+    await window.keplr.enable("red"); // Ahora Keplr ya la reconoce
 
-  const client = await SigningStargateClient.connectWithSigner(
-    "http://localhost:26657",
-    offlineSigner,
-    { registry: customRegistry }
-  );
+    const offlineSigner = window.getOfflineSigner("red");
+    const accounts = await offlineSigner.getAccounts();
 
-  return { client, address: accounts[0].address };
+    const client = await SigningStargateClient.connectWithSigner(
+      "http://localhost:26657",
+      offlineSigner,
+      { registry: customRegistry }
+    );
+
+    return { client, address: accounts[0].address };
+  } catch (err) {
+    console.error("Error al conectar la wallet:", err);
+    toast.error("No se pudo conectar la wallet");
+    throw err;
+  }
 };
+
 
 export const suggestChainToKeplr = async () => {
   if (!window.keplr) throw new Error("Por favor instala Keplr");

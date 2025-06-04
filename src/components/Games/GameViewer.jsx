@@ -1,25 +1,41 @@
 import { useEffect, useState } from 'react';
 import GameCard from './GameCard';
 import { useGames } from '../../hooks/useGames';
+import GamesOptions from './GamesOptions';
 
 const GAMES_PER_PAGE = 5;
 
-const GameViewer = () => {
-  const { games, getAllGames, loading } = useGames();
+const GameViewer = ( { byUser=false } ) => {
+  const { games, getAllGames, loading, allCategories, getGameByUser } = useGames();
   const [currentPage, setCurrentPage] = useState(1);
+  const [category, setcategory] = useState("Todos");
 
-  useEffect(() => {
-    getAllGames(); // Llamada inicial
+ useEffect(() => {
+  var interval;
+  if (byUser !== true) {
+    getAllGames();
 
-    const interval = setInterval(() => {
+      interval = setInterval(() => {
       getAllGames();
     }, 5000);
+  }else{
+    getGameByUser();
 
-    return () => clearInterval(interval);
-  }, []);
+      interval = setInterval(() => {
+      getGameByUser();
+    }, 5000);
+  }
+  return () => clearInterval(interval);
+}, []);
 
-  const totalPages = Math.ceil((games?.length || 0) / GAMES_PER_PAGE);
-  const paginatedGames = games?.slice(
+
+
+  const filteredGames = category === 'Todos'
+  ? [...games].reverse()
+  : [...games]?.filter((game) => game.state === category).reverse();
+
+  const totalPages = Math.ceil((filteredGames?.length || 0) / GAMES_PER_PAGE);
+  const paginatedGames = filteredGames?.slice(
     (currentPage - 1) * GAMES_PER_PAGE,
     currentPage * GAMES_PER_PAGE
   );
@@ -29,6 +45,13 @@ const GameViewer = () => {
       setCurrentPage(page);
     }
   };
+  
+  
+  const filterCategory = (category) => {
+    setcategory(category);
+    setCurrentPage(1); // Reinicia a la primera página al cambiar categoría
+  };
+
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-8 z-10">
@@ -39,6 +62,12 @@ const GameViewer = () => {
       ) : games && games.length > 0 ? (
         <>
           <div className="flex flex-col gap-6">
+          <GamesOptions
+            categories={['Todos', ...allCategories]}
+            filterCategory={filterCategory}
+            selectedCategory={category}
+          />
+
             {paginatedGames.map((game) => (
               <GameCard key={game.id} game={game} />
             ))}

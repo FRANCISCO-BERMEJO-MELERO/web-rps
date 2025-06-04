@@ -13,6 +13,12 @@ export const useGames = () => {
   const [loading, setLoading] = useState(false);
   const { address, balance } = useAuthStore();
 
+  const allCategories = [
+    "pending",
+    "active",
+    "finished",
+  ]
+
   const getActualHeight = async () => {
     try {
       const response = await fetch(`${RPC}/status`);
@@ -62,6 +68,32 @@ export const useGames = () => {
     }
   };
 
+  const getGameByUser = async () => {
+    if(!address){
+      toast.error("Debes conectar tu wallet")
+    }
+
+    try{
+      const res = await fetch(`http://localhost:1317/red/rps/games_by_player/${address}`)
+      if(!res.ok) throw new Error("Error al cargar los juegos")
+
+        const data = await res.json();
+        setGames(prevGames => {
+          if(JSON.stringify(prevGames) !== JSON.stringify(data.games)){
+            return data.games;
+          }
+          return prevGames
+        })
+    }catch(error){
+      console.log("error", error)
+      toast.error("Error al cargar los juegos")
+    }
+  }
+
+  const calculateDeadline = async (time) => {
+    return (await getActualHeight() + time*60) 
+  }
+
 
 
   const joinGame = async (gameId, opponent) => {
@@ -96,11 +128,14 @@ export const useGames = () => {
     }
   };
   const createGame = async (betAmount, betDenom, deadline) => {
-    if (deadline < getActualHeight() || betAmount < balance) {
+
+    if (await calculateDeadline(deadline) < await getActualHeight() || betAmount > balance) {
+      console.log(deadline , ":" , getActualHeight() )
+      console.log(betAmount , ":" , balance )
       toast.error("Apuesta inválida o saldo insuficiente");
       return;
     }
-
+    const time = await calculateDeadline(deadline);
     if (!address) {
       toast.error("Por favor, conecta tu wallet primero");
       return;
@@ -112,10 +147,10 @@ export const useGames = () => {
         value: {
           creator: address,
           bet: {
-            amount: betAmount.toString(),
+            amount: (betAmount*1000000).toString(),
             denom: betDenom,
           },
-          deadline: deadline,
+          deadline: time,
         },
       }
       const fee = {
@@ -197,6 +232,6 @@ export const useGames = () => {
     }
   }
 
-  return { games, loading, getAllGames, joinGame, getActualHeight, createGame, playMove, revealMove };
+  return { games, loading, getAllGames, joinGame, getActualHeight, createGame, playMove, revealMove, allCategories, getGameByUser };
 
 };

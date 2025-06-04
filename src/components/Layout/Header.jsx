@@ -6,7 +6,9 @@ import { Sparkles, Gamepad2, Info, LogIn, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom'
 import { useGames } from '../../hooks/useGames';
 import Modal from './Modals/Modal';
-import { sha256 } from 'js-sha256';
+import { IoMdAddCircleOutline } from "react-icons/io";
+import { FaCopy } from "react-icons/fa";
+
 
 
 export default function Header() {
@@ -30,6 +32,11 @@ export default function Header() {
       console.error(err);
     }
   };
+
+  const copiarAddress = () => {
+    navigator.clipboard.writeText(address)
+    toast.info("Direccion copiada correctamente")
+  }
 
 
 
@@ -65,7 +72,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                to="/my-games"
+                to="/user-games"
                 className="text-sm font-medium hover:text-purple-400 transition-all flex items-center gap-1 hover:scale-110 active:scale-95 duration-300"
               >
                 <Gamepad2 className="h-4 w-4" /> Mis Juegos
@@ -79,24 +86,26 @@ export default function Header() {
                 <Info className="h-4 w-4" /> Acerca de
               </Link>
             </li>
-          </ul>
+          </ul> 
 
           {/* Acciones */}
           <div className="flex items-center gap-4">
             {address ? (
               <>
-                <span className="bg-gradient-to-r from-green-500 to-emerald-400 text-sm px-4 py-2 rounded-full shadow-md animate-pulse">
+                <button onClick={() => copiarAddress() } className=" border border-green-600 text-green-300 text-sm px-4 py-2 rounded-full shadow-md animate-pulse flex gap-2 items-center">
+                  <FaCopy className='h-4 w-4' />
                   {address.slice(0, 10)}...
-                </span>
+                </button>
                 <button
                   onClick={() => setShowModal(true)}
-                  className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-sm px-4 py-2 rounded-full shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
+                  className=" border border-purple-600 text-purple-300  text-sm px-4 py-2 rounded-full shadow-md hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2"
                 >
+                  <IoMdAddCircleOutline className='h-5 w-5  ' />
                   Crear juego
                 </button>
                 <button
                   onClick={disconnectWallet}
-                  className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-rose-500 text-sm px-4 py-2 rounded-full shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
+                  className="flex items-center gap-2 border border-red-600 text-red-300 text-sm px-4 py-2 rounded-full shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
                 >
                   <LogOut className="h-4 w-4" />
                   Cerrar sesión
