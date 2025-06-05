@@ -21,6 +21,7 @@ export const connectWallet = async () => {
       offlineSigner,
       { registry: customRegistry }
     );
+    console.log("Cliente",client)
 
     return { client, address: accounts[0].address };
   } catch (err) {

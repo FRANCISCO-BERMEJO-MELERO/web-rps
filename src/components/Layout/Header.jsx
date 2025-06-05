@@ -35,7 +35,7 @@ export default function Header() {
 
   const copiarAddress = () => {
     navigator.clipboard.writeText(address)
-    toast.info("Direccion copiada correctamente")
+    toast.info("Direccion copiada en el portapapeles")
   }
 
 

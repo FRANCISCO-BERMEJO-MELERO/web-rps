@@ -17,6 +17,7 @@ export const useGames = () => {
     "pending",
     "active",
     "finished",
+    "timeout"
   ]
 
   const getActualHeight = async () => {
@@ -54,7 +55,7 @@ export const useGames = () => {
     try {
       const response = await fetch('http://localhost:1317/red/rps/games/');
       if (!response.ok) throw new Error('Error fetching games');
-
+      console.log("Games", games)
       const data = await response.json();
       setGames(prevGames => {
         if (JSON.stringify(prevGames) !== JSON.stringify(data.games)) {
@@ -232,6 +233,34 @@ export const useGames = () => {
     }
   }
 
-  return { games, loading, getAllGames, joinGame, getActualHeight, createGame, playMove, revealMove, allCategories, getGameByUser };
+  const claimTimeOut = async (id) => {
+     if (!address){
+      toast.error("Por favor, conecta tu wallet primero")
+      return;
+    }
+
+    try{
+      const { client, address } = await connectWallet()
+      const msg ={
+        typeUrl: "/red.rps.MsgClaimTimeout",
+        value: {
+            creator: address,
+            player: address,
+            gameId: id,
+        }
+      }
+      const fee = {
+        amount: [{ denom: "stake", amount: "500" }],
+        gas: "200000",
+      };
+      const result = await client.signAndBroadcast(address, [msg], fee)
+      console.log("✅Resultado: ", result)
+      toast.success("Premio reclamado correctamente")
+    }catch(error){
+      toast.error("Error al reclamar el premio")
+    }
+  }
+
+  return { games, loading, getAllGames, joinGame, getActualHeight, createGame, playMove, revealMove, allCategories, getGameByUser, claimTimeOut };
 
 };

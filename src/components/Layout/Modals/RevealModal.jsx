@@ -19,20 +19,21 @@ export default function RevealModal({ id, onClose }) {
     ];
 
     const handleSubmit = async (e) => {
-       e.preventDefault();
-    if (!selectedMove ) {
-      toast.error("Por favor, selecciona un movimiento y escribe un nonce");
-      return;
-    }
+      e.preventDefault();
+      if (!selectedMove ) {
+        toast.error("Por favor, selecciona un movimiento y escribe un nonce");
+        return;
+      }
 
-    try {
-      await revealMove(id, selectedMove);
-      toast.success("Movimiento enviado correctamente");
-      await new Promise((resolve) => setTimeout(resolve, 1000)); 
-    } catch (error) {
-      console.error("Error al jugar el movimiento:", error);
-      toast.error("Error al jugar el movimiento");
-    }
+      try {
+        await revealMove(id, selectedMove);
+        toast.success("Movimiento enviado correctamente");
+        await new Promise((resolve) => setTimeout(resolve, 1000)); 
+        onClose();
+      } catch (error) {
+        console.error("Error al jugar el movimiento:", error);
+        toast.error("Error al jugar el movimiento");
+      }
     }
 
   const modalContent = (

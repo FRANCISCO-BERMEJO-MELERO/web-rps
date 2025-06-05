@@ -18,12 +18,10 @@ export default function GameCard({game}) {
   const [deadlineMinutes, setDeadlineMinutes] = useState(null);
 
   useEffect(() => {
+    console.log("Games", game)
   const calculateDeadline = async () => {
     const currentHeight = await getActualHeight();
-    console.log(currentHeight)
-    console.log("Deadline", game.deadline)
     const remaining = (game.deadline  - currentHeight)/60;
-    console.log("Remaining", remaining)
     if(remaining > 0){
       setDeadlineMinutes(remaining.toFixed(2));
     }else{
