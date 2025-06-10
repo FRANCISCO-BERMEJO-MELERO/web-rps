@@ -11,13 +11,13 @@ export const connectWallet = async () => {
 
   try {
     await suggestChainToKeplr(); // Sugerir red primero
-    await window.keplr.enable("red"); // Ahora Keplr ya la reconoce
+    await window.keplr.enable("roshambo"); // Ahora Keplr ya la reconoce
 
-    const offlineSigner = window.getOfflineSigner("red");
+    const offlineSigner = window.getOfflineSigner("roshambo");
     const accounts = await offlineSigner.getAccounts();
 
     const client = await SigningStargateClient.connectWithSigner(
-      "http://localhost:26657",
+      "http://134.122.80.29:26657",
       offlineSigner,
       { registry: customRegistry }
     );
@@ -36,18 +36,18 @@ export const suggestChainToKeplr = async () => {
   if (!window.keplr) throw new Error("Por favor instala Keplr");
 
   await window.keplr.experimentalSuggestChain({
-    chainId: "red",
-    chainName: "Red",
-    rpc: "http://localhost:26657",
-    rest: "http://localhost:1317",
+    chainId: "roshambo",
+    chainName: "Roshambo",
+    rpc: "http://134.122.80.29:26657",
+    rest: "http://134.122.80.29:1317",
     bip44: { coinType: 118 },
     bech32Config: {
-      bech32PrefixAccAddr: "cosmos",
-      bech32PrefixAccPub: "cosmospub",
-      bech32PrefixValAddr: "cosmosvaloper",
-      bech32PrefixValPub: "cosmosvaloperpub",
-      bech32PrefixConsAddr: "cosmosvalcons",
-      bech32PrefixConsPub: "cosmosvalconspub",
+      bech32PrefixAccAddr: "rosh",
+      bech32PrefixAccPub: "roshpub",
+      bech32PrefixValAddr: "roshvaloper",
+      bech32PrefixValPub: "roshvaloperpub",
+      bech32PrefixConsAddr: "roshvalcons",
+      bech32PrefixConsPub: "roshvalconspub",
     },
     currencies: [{ coinDenom: "STAKE", coinMinimalDenom: "stake", coinDecimals: 6 }],
     feeCurrencies: [{ coinDenom: "STAKE", coinMinimalDenom: "stake", coinDecimals: 6 }],

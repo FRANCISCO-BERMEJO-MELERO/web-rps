@@ -90,11 +90,11 @@ export default function Modal({ onClose }) {
                             />
                             <select
                                 name="denom"
-                                defaultValue="stake"
+                                defaultValue="umano"
                                 className="px-4 py-2 rounded-md bg-neutral-800 border border-purple-500/30 focus:border-purple-400 focus:outline-none text-white transition"
                                 required
                             >
-                                <option value="stake">UMANO</option>
+                                <option value="umano">UMANO</option>
                             </select>
                         </div>
                         <label className="text-sm text-purple-300 font-semibold text-left">Duración de la partida (minutos)</label>

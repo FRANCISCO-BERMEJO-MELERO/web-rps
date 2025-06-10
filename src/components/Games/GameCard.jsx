@@ -14,25 +14,28 @@ export default function GameCard({game}) {
 
   const formattedBetAmount = (parseFloat(game.bet.amount) / 1e6).toLocaleString('es-ES');
   const formattedBetDenom = game.bet.denom === 'stake' ? 'UMANO' : game.bet_denom;
-  const formattedCreatedAt = new Date(game.created_at * 1000).toLocaleString();
-  const [deadlineMinutes, setDeadlineMinutes] = useState(null);
 
-  useEffect(() => {
-    console.log("Games", game)
+  const [deadlineMinutes, setDeadlineMinutes] = useState({ mins: null, secs: null });
+
+useEffect(() => {
   const calculateDeadline = async () => {
     const currentHeight = await getActualHeight();
-    const remaining = (game.deadline  - currentHeight)/60;
-    if(remaining > 0){
-      setDeadlineMinutes(remaining.toFixed(2));
-    }else{
-      setDeadlineMinutes(0)
+    const totalSeconds = game.deadline - currentHeight;
+
+    if (totalSeconds > 0) {
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      setDeadlineMinutes({ mins, secs });
+    } else {
+      setDeadlineMinutes({ mins: 0, secs: 0 });
     }
   };
 
   if (game.deadline) {
     calculateDeadline();
   }
-  }, [game]);
+}, [game]);
+
 
 
 
@@ -88,7 +91,7 @@ export default function GameCard({game}) {
           )}
           {game.state === 'finished' && (
             <p className="text-sm">
-              <Sparkles className="inline-block w-4 h-4 text-amber-400" /> Ganador: <span className="font-bold">{game.winner === game.creator ? 'Jugador 1' : game.winner === game.opponent ? 'Jugador 2' : 'Ninguno'}</span>
+              <Sparkles className="inline-block w-4 h-4 text-amber-400" /> Ganador: <span className="font-bold">{game.winner === game.creator ? 'Jugador 1' : game.winner === game.opponent ? 'Jugador 2' : 'Empate'}</span>
             </p>
           )}
           <GameActions game={game} user={address} />
@@ -108,9 +111,11 @@ export default function GameCard({game}) {
       </div>
 
       <div className="mt-4 text-xs text-gray-400 text-center">
-        <p>Creado en: {formattedCreatedAt}</p>
-        <p>Duración: {deadlineMinutes !== null ? `${deadlineMinutes} min` : 'Cargando...'}</p>
-
+        <p>
+          Duración: {deadlineMinutes.mins !== null 
+            ? `${deadlineMinutes.mins} min ${deadlineMinutes.secs} seg` 
+            : 'Cargando...'}
+        </p>
       </div>
 
       <button

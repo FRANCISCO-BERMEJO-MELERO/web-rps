@@ -4,7 +4,7 @@ import { useAuthStore } from '../stores/authStore';
 import { toast } from 'sonner';
 import { connectWallet } from '../utils/blockchain';
 import { sha256 } from 'js-sha256';
-const RPC = "http://localhost:26657";
+const RPC = "http://134.122.80.29:26657";
 
 
 export const useGames = () => {
@@ -53,7 +53,7 @@ export const useGames = () => {
 
   const getAllGames = async () => {
     try {
-      const response = await fetch('http://localhost:1317/red/rps/games/');
+      const response = await fetch('http://134.122.80.29:1317/roshambo/rps/games/');
       if (!response.ok) throw new Error('Error fetching games');
       console.log("Games", games)
       const data = await response.json();
@@ -75,7 +75,7 @@ export const useGames = () => {
     }
 
     try{
-      const res = await fetch(`http://localhost:1317/red/rps/games_by_player/${address}`)
+      const res = await fetch(`http://134.122.80.29:1317/roshambo/rps/games_by_player/${address}`)
       if(!res.ok) throw new Error("Error al cargar los juegos")
 
         const data = await res.json();
@@ -107,7 +107,7 @@ export const useGames = () => {
       const { client, address } = await connectWallet();
 
       const msg = {
-        typeUrl: "/red.rps.MsgJoinGame",
+        typeUrl: "/roshambo.rps.MsgJoinGame",
         value: {
           creator: address,
           opponent,
@@ -116,7 +116,7 @@ export const useGames = () => {
       };
 
       const fee = {
-        amount: [{ denom: "stake", amount: "500" }],
+        amount: [{ denom: "umano", amount: "500" }],
         gas: "200000",
       };
 
@@ -144,7 +144,7 @@ export const useGames = () => {
     try {
       const { client, address } = await connectWallet();
       const msg = {
-        typeUrl: "/red.rps.MsgCreateGame",
+        typeUrl: "/roshambo.rps.MsgCreateGame",
         value: {
           creator: address,
           bet: {
@@ -155,7 +155,7 @@ export const useGames = () => {
         },
       }
       const fee = {
-        amount: [{ denom: "stake", amount: "500" }],
+        amount: [{ denom: "umano", amount: "500" }],
         gas: "200000",
       };
       const result = await client.signAndBroadcast(address, [msg], fee);
@@ -177,7 +177,7 @@ export const useGames = () => {
       const nonce = getSecretWord()
       const { client, address } = await connectWallet();
       const msg = {
-        typeUrl: "/red.rps.MsgPlayMove",
+        typeUrl: "/roshambo.rps.MsgPlayMove",
         value: {
           creator: address,
           player: address,
@@ -187,7 +187,7 @@ export const useGames = () => {
       };
 
       const fee = {
-        amount: [{ denom: "stake", amount: "500" }],
+        amount: [{ denom: "umano", amount: "500" }],
         gas: "200000",
       };
 
@@ -210,7 +210,7 @@ export const useGames = () => {
       const nonce = getSecretWord()
       const { client, address } = await connectWallet()
       const msg = {
-        typeUrl: "/red.rps.MsgRevealMove",
+        typeUrl: "/roshambo.rps.MsgRevealMove",
         value: {
           creator: address,
           player: address,
@@ -220,7 +220,7 @@ export const useGames = () => {
         }
       }
       const fee = {
-        amount: [{ denom: "stake", amount: "500" }],
+        amount: [{ denom: "umano", amount: "500" }],
         gas: "200000",
       };
       const result = await client.signAndBroadcast(address, [msg], fee)
@@ -242,7 +242,7 @@ export const useGames = () => {
     try{
       const { client, address } = await connectWallet()
       const msg ={
-        typeUrl: "/red.rps.MsgClaimTimeout",
+        typeUrl: "/roshambo.rps.MsgClaimTimeout",
         value: {
             creator: address,
             player: address,
@@ -250,7 +250,7 @@ export const useGames = () => {
         }
       }
       const fee = {
-        amount: [{ denom: "stake", amount: "500" }],
+        amount: [{ denom: "umano", amount: "500" }],
         gas: "200000",
       };
       const result = await client.signAndBroadcast(address, [msg], fee)

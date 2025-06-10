@@ -1,11 +1,11 @@
 // utils/registry.js
 import { Registry } from "@cosmjs/proto-signing";
-import { MsgCreateGame, MsgJoinGame, MsgPlayMove, MsgRevealMove, MsgClaimTimeout } from "../types/generated/red/rps/tx";
+import { MsgCreateGame, MsgJoinGame, MsgPlayMove, MsgRevealMove, MsgClaimTimeout } from "../types/types/roshambo/rps/tx";
 
 export const customRegistry = new Registry([
-  ["/red.rps.MsgCreateGame", MsgCreateGame],
-  ["/red.rps.MsgJoinGame", MsgJoinGame],
-  ["/red.rps.MsgPlayMove", MsgPlayMove],
-  ["/red.rps.MsgRevealMove", MsgRevealMove],
-  ["/red.rps.MsgClaimTimeout", MsgClaimTimeout],
+  ["/roshambo.rps.MsgCreateGame", MsgCreateGame],
+  ["/roshambo.rps.MsgJoinGame", MsgJoinGame],
+  ["/roshambo.rps.MsgPlayMove", MsgPlayMove],
+  ["/roshambo.rps.MsgRevealMove", MsgRevealMove],
+  ["/roshambo.rps.MsgClaimTimeout", MsgClaimTimeout],
 ]);

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { connectWallet } from '../utils/blockchain';
 import { StargateClient } from "@cosmjs/stargate";
-const RPC = "http://localhost:26657";
+const RPC = "http://134.122.80.29:26657";
 
 // Cargar estado inicial desde localStorage
 const savedAuth = JSON.parse(localStorage.getItem('auth')) || {};
@@ -9,7 +9,7 @@ const savedAuth = JSON.parse(localStorage.getItem('auth')) || {};
 async function getBalance(address) {
   const client = await StargateClient.connect(RPC);
   const balance = await client.getAllBalances(address);
-  const stakeBalance = balance.find(b => b.denom === 'stake');
+  const stakeBalance = balance.find(b => b.denom === 'umano');
   return stakeBalance ? parseFloat(stakeBalance.amount) / 1000000 : 0;
 }
 
@@ -17,32 +17,29 @@ const useAuthStore = create((set, get) => ({
   isAuthenticated: savedAuth.isAuthenticated || false,
   address: savedAuth.address || null,
   balance: savedAuth.balance || 0,
-  wins: 0,
-  losses: 0,
   client: null,
 
   login: (address) => {
     set({ isAuthenticated: true, address });
-    localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, address }));
+    localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, address, balance: get().balance }));
   },
   logout: () => {
     set({ isAuthenticated: false, address: null, balance: 0, wins: 0, losses: 0, client: null });
     localStorage.removeItem('auth');
   },
-
   connectWallet: async () => {
     try {
       const { client, address } = await connectWallet();
-      set({ isAuthenticated: true, address, client });
-      localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, address }));
-      const balance = await getBalance(address);
-      set({ balance });
+      const balance = await getBalance(address); // <-- calcula primero
+      set({ isAuthenticated: true, address, client, balance }); // <-- luego actualiza el estado
+      localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, address, balance })); // <-- guarda todo
       console.log("Conectado a la wallet:", address, "Balance:", balance);
       return { client, address, balance };
     } catch (error) {
       console.error("Error al conectar la wallet:", error);
     }
   },
+
 
   disconnectWallet: () => {
     set({ isAuthenticated: false, address: null, balance: 0, wins: 0, losses: 0, client: null });
