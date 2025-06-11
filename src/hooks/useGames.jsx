@@ -1,10 +1,10 @@
-// useGames.js
+// useGames.js134.122.80.29:1317
 import { useState } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import { toast } from 'sonner';
 import { connectWallet } from '../utils/blockchain';
 import { sha256 } from 'js-sha256';
-const RPC = "http://134.122.80.29:26657";
+const RPC = "https://roshambo.dezen.dev/rpc";
 
 
 export const useGames = () => {
@@ -53,7 +53,7 @@ export const useGames = () => {
 
   const getAllGames = async () => {
     try {
-      const response = await fetch('http://134.122.80.29:1317/roshambo/rps/games/');
+      const response = await fetch('https://roshambo.dezen.dev/api/roshambo/rps/games/');
       if (!response.ok) throw new Error('Error fetching games');
       console.log("Games", games)
       const data = await response.json();
@@ -75,7 +75,7 @@ export const useGames = () => {
     }
 
     try{
-      const res = await fetch(`http://134.122.80.29:1317/roshambo/rps/games_by_player/${address}`)
+      const res = await fetch(`https://roshambo.dezen.dev/api/roshambo/rps/games_by_player/${address}`)
       if(!res.ok) throw new Error("Error al cargar los juegos")
 
         const data = await res.json();
