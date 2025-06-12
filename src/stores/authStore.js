@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { connectWallet } from '../utils/blockchain';
 import { StargateClient } from "@cosmjs/stargate";
-const RPC = "https://roshambo.dezen.dev/rpc";
+const RPC = "https://roshambo.dezen.dev/rpc/";
 
 // Cargar estado inicial desde localStorage
 const savedAuth = JSON.parse(localStorage.getItem('auth')) || {};

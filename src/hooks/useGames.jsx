@@ -4,7 +4,7 @@ import { useAuthStore } from '../stores/authStore';
 import { toast } from 'sonner';
 import { connectWallet } from '../utils/blockchain';
 import { sha256 } from 'js-sha256';
-const RPC = "https://roshambo.dezen.dev/rpc";
+const RPC = "https://roshambo.dezen.dev/rpc/";
 
 
 export const useGames = () => {

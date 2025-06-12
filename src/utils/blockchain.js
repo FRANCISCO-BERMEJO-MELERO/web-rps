@@ -17,7 +17,7 @@ export const connectWallet = async () => {
     const accounts = await offlineSigner.getAccounts();
 
     const client = await SigningStargateClient.connectWithSigner(
-      "https://roshambo.dezen.dev/rpc",
+      "https://roshambo.dezen.dev/rpc/",
       offlineSigner,
       { registry: customRegistry }
     );
@@ -38,7 +38,7 @@ export const suggestChainToKeplr = async () => {
   await window.keplr.experimentalSuggestChain({
     chainId: "roshambo",
     chainName: "Roshambo",
-    rpc: "https://roshambo.dezen.dev/rpc",
+    rpc: "https://roshambo.dezen.dev/rpc/",
     rest: "https://roshambo.dezen.dev/api",
     bip44: { coinType: 118 },
     bech32Config: {
