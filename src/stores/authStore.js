@@ -33,7 +33,6 @@ const useAuthStore = create((set, get) => ({
       const balance = await getBalance(address); // <-- calcula primero
       set({ isAuthenticated: true, address, client, balance }); // <-- luego actualiza el estado
       localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, address, balance })); // <-- guarda todo
-      console.log("Conectado a la wallet:", address, "Balance:", balance);
       return { client, address, balance };
     } catch (error) {
       console.error("Error al conectar la wallet:", error);
