@@ -13,7 +13,7 @@ export default function GameCard({game}) {
   const isActive = game.state === 'active';
 
   const formattedBetAmount = (parseFloat(game.bet.amount) / 1e6).toLocaleString('es-ES');
-  const formattedBetDenom = game.bet.denom === 'stake' ? 'UMANO' : game.bet_denom;
+  const formattedBetDenom = game.bet.denom === 'stake' ? 'UMANO' : game.bet.denom;
 
   const [deadlineMinutes, setDeadlineMinutes] = useState({ mins: null, secs: null });
 
