@@ -14,13 +14,10 @@ const GameViewer = ( { byUser=false } ) => {
   var interval;
   if (byUser !== true) {
     getAllGames();
-
-           /* 
            interval = setInterval(() => {
            getAllGames();
          }, 5000);
       
-           */
 
   }else{
     getGameByUser();
